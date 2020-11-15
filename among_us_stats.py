@@ -74,16 +74,11 @@ class FancyStats(Stats):
         )
 
 
-def load_file(filename: str) -> bytes:
-    with open(filename, 'rb') as fd:
-        return fd.read()
-
-
-def parse_stats(data: bytes) -> Stats:
+def load_stats(filename: str) -> Stats:
     format = '<x18I76x'
-    unpacked_data = struct.unpack(format, data)
-    result = Stats(*unpacked_data)
-    return result
+    with open(filename, 'rb') as fd:
+        unpacked_data = struct.unpack(format, fd.read())
+    return Stats(*unpacked_data)
 
 
 def print_stats(stats: Stats) -> None:
@@ -106,8 +101,7 @@ def main():
     if not isinstance(loglevel, int):
         raise ValueError('Invalid log level: {}'.format(args.loglevel))
     logging.basicConfig(level=loglevel)
-    data = load_file(args.statsfile)
-    stats = parse_stats(data)
+    stats = load_stats(args.statsfile)
     if not args.fancy:
         print_stats(stats)
     else:
