@@ -38,10 +38,10 @@ class FancyStats(Stats):
     task_completion_ratio: float = field(init=False)
     kills_per_game: float = field(init=False)
     murdered_per_game: float = field(init=False)
-    impostor_lost: float = field(init=False)
+    impostor_lost: float = field(init=False, repr=False)
     impostor_bias: float = field(init=False)
-    crewmate_vote_win_ratio: float = field(init=False)
-    untrustworthiness_ratio: float = field(init=False)
+    crewmate_vote_win_ratio: float = field(init=False, repr=False)
+    untrustworthiness_ratio: float = field(init=False, repr=False)
     untrustworthiness_index: float = field(init=False)
 
     def __post_init__(self):
