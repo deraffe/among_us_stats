@@ -22,11 +22,11 @@ class Stats:
     times_crewmate: int
     games_started: int
     games_finished: int
+    crewmate_vote_wins: int
+    crewmate_task_wins: int
     impostor_vote_wins: int
     impostor_kill_wins: int
     impostor_sabotage_wins: int
-    crewmate_vote_wins: int
-    crewmate_task_wins: int
 
 
 def load_file(filename: str) -> bytes:
