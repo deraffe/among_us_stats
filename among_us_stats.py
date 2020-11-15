@@ -35,9 +35,11 @@ class FancyStats(Stats):
     tasks_per_game: float = field(init=False)
     impostor_win_ratio: float = field(init=False)
     crewmate_win_ratio: float = field(init=False)
+    sabotages_fixed_per_game: float = field(init=False)
     task_completion_ratio: float = field(init=False)
     kills_per_game: float = field(init=False)
     murdered_per_game: float = field(init=False)
+    kill_death_ratio: float = field(init=False)
     impostor_lost: float = field(init=False, repr=False)
     impostor_bias: float = field(init=False)
     crewmate_vote_win_ratio: float = field(init=False, repr=False)
@@ -54,9 +56,14 @@ class FancyStats(Stats):
         self.crewmate_win_ratio = (
             self.crewmate_vote_wins + self.crewmate_task_wins
         ) / self.times_crewmate
+        # yes, impostors can also fix - but if you do that, it should count extra towards your crewmate bonuses
+        self.sabotages_fixed_per_game = self.sabotages_fixed / self.times_crewmate
         self.task_completion_ratio = self.all_tasks_completed / self.times_crewmate
         self.kills_per_game = self.impostor_kills / self.times_impostor
         self.murdered_per_game = self.times_murdered / self.times_crewmate
+        self.kill_death_ratio = self.impostor_kills / (
+            self.times_murdered + self.times_ejected
+        )
         self.impostor_lost = (
             self.times_impostor -
             (self.impostor_vote_wins + self.impostor_kill_wins)
