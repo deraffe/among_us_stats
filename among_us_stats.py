@@ -2,7 +2,7 @@
 import argparse
 import logging
 import struct
-from dataclasses import asdict, astuple, dataclass, field
+from dataclasses import asdict, astuple, dataclass, field, fields
 
 log = logging.getLogger(__name__)
 
@@ -89,7 +89,10 @@ def load_stats(filename: str) -> Stats:
 
 
 def print_stats(stats: Stats) -> None:
+    hidden_fields = [f.name for f in fields(stats) if not f.repr]
     for name, value in asdict(stats).items():
+        if name in hidden_fields:
+            continue
         if type(value) == float:
             print('{}: {:.2f}'.format(name, value))
         else:
