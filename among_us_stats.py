@@ -88,7 +88,10 @@ def parse_stats(data: bytes) -> Stats:
 
 def print_stats(stats: Stats) -> None:
     for name, value in asdict(stats).items():
-        print('{}: {}'.format(name, value))
+        if type(value) == float:
+            print('{}: {:.2f}'.format(name, value))
+        else:
+            print('{}: {}'.format(name, value))
 
 
 def main():
