@@ -41,6 +41,11 @@ def parse_stats(data: bytes) -> Stats:
     return result
 
 
+def print_stats(stats: Stats) -> None:
+    for name, value in dataclasses.asdict(stats).items():
+        print('{}: {}'.format(name, value))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -54,7 +59,7 @@ def main():
     logging.basicConfig(level=loglevel)
     data = load_file(args.statsfile)
     stats = parse_stats(data)
-    print(stats)
+    print_stats(stats)
 
 
 if __name__ == '__main__':
