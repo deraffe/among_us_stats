@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import logging
+import pathlib
 import struct
 from dataclasses import asdict, astuple, dataclass, field, fields
 
@@ -105,12 +106,30 @@ def print_stats(stats: Stats, print_hidden=False) -> None:
             print('{}: {}'.format(name, value))
 
 
+def try_finding_statsfile() -> str:
+    appdata_path = 'AppData/LocalLow/Innersloth/Among Us/playerStats2'
+    possible_paths = (
+        pathlib.Path.home() / appdata_path,
+        pathlib.Path(
+            '~/.local/share/Steam/steamapps/compatdata/945360/pfx/drive_c/users/steamuser'
+        ) / appdata_path,
+    )
+    for path in possible_paths:
+        expanded_path = path.expanduser()
+        log.debug('Trying {}'.format(expanded_path))
+        if expanded_path.exists():
+            return str(expanded_path)
+    raise ValueError('Cannot find the playerStats2 file')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--loglevel', default='WARNING', help="Loglevel", action='store'
     )
-    parser.add_argument('statsfile', help='Filename of the playerStats2 file')
+    parser.add_argument(
+        'statsfile', nargs='?', help='Filename of the playerStats2 file'
+    )
     parser.add_argument('--fancy', action='store_true', help='Fancy stats')
     parser.add_argument(
         '--hidden', action='store_true', help='Print hidden fields'
@@ -120,7 +139,11 @@ def main():
     if not isinstance(loglevel, int):
         raise ValueError('Invalid log level: {}'.format(args.loglevel))
     logging.basicConfig(level=loglevel)
-    stats = load_stats(args.statsfile)
+    if args.statsfile is None:
+        statsfile = try_finding_statsfile()
+    else:
+        statsfile = args.statsfile
+    stats = load_stats(statsfile)
     if not args.fancy:
         print_stats(stats, args.hidden)
     else:

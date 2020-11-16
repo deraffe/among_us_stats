@@ -6,12 +6,14 @@ Simple Among Us stats reader. Enables you to calculate some derived values easil
 
 See the integrated help (using `among_us_stats.py -h`) for more options.
 
+The script will try to find your playerStats2 file at the usual locations. If it is not successful, provide the path as an argument like this:
+
 ```sh
 ./among_us_stats.py [path to your playerStats2 file]
 ```
 
 The playerStats2 file can usually be found at these locations:
-- Steam+Windows: `C:\Users\%user%\AppData\LocalLow\Innersloth\Among Us\playerStats2` (or more precisely `%USERPROFILE%\AppData\LocalLow\LocalLow\Innersloth\Among Us\playerStats2`)
+- Steam+Windows: `C:\Users\%user%\AppData\LocalLow\Innersloth\Among Us\playerStats2` (or more precisely `%USERPROFILE%\AppData\LocalLow\Innersloth\Among Us\playerStats2`)
 - Steam+Proton: `~/.local/share/Steam/steamapps/compatdata/945360/pfx/drive_c/users/steamuser/AppData/LocalLow/Innersloth/Among\ Us/playerStats2`
 
 ## Thanks
