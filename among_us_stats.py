@@ -94,10 +94,10 @@ def load_stats(filename: str) -> Stats:
     return Stats(*unpacked_data)
 
 
-def print_stats(stats: Stats) -> None:
+def print_stats(stats: Stats, print_hidden=False) -> None:
     hidden_fields = [f.name for f in fields(stats) if not f.repr]
     for name, value in asdict(stats).items():
-        if name in hidden_fields:
+        if name in hidden_fields and not print_hidden:
             continue
         if type(value) == float:
             print('{}: {:.2f}'.format(name, value))
@@ -112,6 +112,9 @@ def main():
     )
     parser.add_argument('statsfile', help='Filename of the playerStats2 file')
     parser.add_argument('--fancy', action='store_true', help='Fancy stats')
+    parser.add_argument(
+        '--hidden', action='store_true', help='Print hidden fields'
+    )
     args = parser.parse_args()
     loglevel = getattr(logging, args.loglevel.upper(), None)
     if not isinstance(loglevel, int):
@@ -119,10 +122,10 @@ def main():
     logging.basicConfig(level=loglevel)
     stats = load_stats(args.statsfile)
     if not args.fancy:
-        print_stats(stats)
+        print_stats(stats, args.hidden)
     else:
         fancy_stats = FancyStats(*astuple(stats))
-        print_stats(fancy_stats)
+        print_stats(fancy_stats, args.hidden)
 
 
 if __name__ == '__main__':
