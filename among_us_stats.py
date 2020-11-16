@@ -9,6 +9,7 @@ log = logging.getLogger(__name__)
 
 @dataclass
 class Stats:
+    verbosity: int = field(repr=False)
     bodies_reported: int
     emergencies_called: int
     tasks_completed: int
@@ -27,6 +28,11 @@ class Stats:
     impostor_vote_wins: int
     impostor_kill_wins: int
     impostor_sabotage_wins: int
+    win_array: bytes = field(repr=False)
+    lose_array: bytes = field(repr=False)
+    tie_array: bytes = field(repr=False)
+    ban_points: float = field(repr=False)
+    last_game: bytes = field(repr=False)
 
 
 @dataclass
@@ -82,7 +88,7 @@ class FancyStats(Stats):
 
 
 def load_stats(filename: str) -> Stats:
-    format = '<x18I76x'
+    format = '<B18I8s28s28sf8s'
     with open(filename, 'rb') as fd:
         unpacked_data = struct.unpack(format, fd.read())
     return Stats(*unpacked_data)
